@@ -10,7 +10,7 @@ import urllib.parse
 # rnd_str = uuid.uuid4().hex
 # main_name="download_" + rnd_str + "/"
 main_name = "vietnam-innovation-summit-2024/"
-old_href = "https://vis2023.my.canva.site/vis-2024"
+old_href = "https://intercomeduvn.my.canva.site/vietnam-innovation-summit-2024-2"
 new_href = "https://innolab.asia/vietnam-innovation-summit-2024/"
 
 # main_name = "esg-consulting/"
@@ -84,13 +84,16 @@ with open(main_name + "index.html", "w") as f:
 
     # Find the <meta> element with the specified property attribute
     meta_element = soup.find('meta', property='og:image')
-    # Replace the link in the content attribute
-    thumbnail_link = meta_element['content']
-    new_link = thumbnail_link.replace(old_href, new_href)
-    meta_element['content'] = new_link
+    if meta_element:
+        # Replace the link in the content attribute
+        thumbnail_link = meta_element['content']
+        new_link = thumbnail_link.replace(old_href, new_href)
+        meta_element['content'] = new_link
+    else:
+        thumbnail_link = None
 
     html_content = str(soup)
-    
+
     converted_text = re.sub(pattern, replace_link, html_content)
     f.write(converted_text)
 
@@ -98,26 +101,30 @@ with open(main_name + "index.html", "w") as f:
 thumbnail_link
 
 img_tags = soup.find_all('img')
-urls = [img['src'] for img in img_tags]
-for img in img_tags:
-    try:
-        for i in img['srcset'].split(", "):
-            urls.append(i.split(" ")[0])
-    except:
-        pass
+if img_tags:
+    urls = [img['src'] for img in img_tags]
+    for img in img_tags:
+        try:
+            for i in img['srcset'].split(", "):
+                urls.append(i.split(" ")[0])
+        except:
+            pass
 
-with open(main_name + thumbnail_link.split("/")[-1], "wb") as f:
-    response = requests.get(thumbnail_link)
-    f.write(response.content)
+    if thumbnail_link:
+        with open(main_name + thumbnail_link.split("/")[-1], "wb") as f:
+            response = requests.get(thumbnail_link)
+            f.write(response.content)
 
-for url in urls:
-    filename = url.split("/")[1]
-    with open(main_folder + filename, 'wb') as f:
-        if 'http' not in url:
-            url = '{}{}'.format(old_href + "/", url)
-        print(url)
-        response = requests.get(url)
-        f.write(response.content)
+    for url in urls:
+        filename = url.split("/")[1]
+        with open(main_folder + filename, 'wb') as f:
+            if 'http' not in url:
+                url = '{}{}'.format(old_href + "/", url)
+            print(url)
+            response = requests.get(url)
+            f.write(response.content)
+else:
+    print("No images found on the page.")
 
 #find all js
 for script in soup.find_all("script"):
@@ -129,8 +136,8 @@ for script in soup.find_all("script"):
             f.write(response.content)
 
 # find all fonts
-font_face_patterns = r'@font-face {.*?src: url\((.*?\.woff2).*?'
-font_urls = re.findall(font_face_patterns, response_ori.text, re.DOTALL)
+font_face_pattern = r'@font-face\s*{[^}]*?src:\s*url\([\'"]?(.*?\.woff2?)[\'"]?\)[^}]*}'
+font_urls = re.findall(font_face_pattern, response_ori.text, re.DOTALL | re.IGNORECASE)
 for font_url in font_urls:
     print(font_url)
     with open(main_name + font_url, "wb") as f:
@@ -147,7 +154,7 @@ for video in vid_tags:
 # find all header png
 head = response_ori.text.split("<head>")[1].split("</head>")[0]
 png_patterns = r'href="(.*?\.png)"'
-png_urls = re.findall(png_patterns, head) 
+png_urls = re.findall(png_patterns, head)
 
 for url in png_urls:
     print(url.split("\"")[-1])
