@@ -80,7 +80,7 @@ This guide will help you set up and run the web crawler using Python 3.8. Follow
 
    **Command:**
    ```
-   python crawler.py
+   python main.py
    ```
    Replace **`crawler.py`** with the name of the Python file that runs the crawler if it has a different name.
 3. Follow any on-screen instructions. The crawler will begin collecting the data you need.
