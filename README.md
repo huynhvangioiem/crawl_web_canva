@@ -64,7 +64,7 @@ This guide will help you set up and run the web crawler using Python 3.8. Follow
 
    **Command:**
    ```
-   myenv\Scripts\activate
+   ./myenv/Scripts/activate
    ```
 5. To install all the required packages, type the following command and press **Enter**:
 
