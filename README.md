@@ -82,16 +82,14 @@ This guide will help you set up and run the web crawler using Python 3.8. Follow
    ```
    python main.py
    ```
-   Replace **`crawler.py`** with the name of the Python file that runs the crawler if it has a different name.
+   Replace **`main.py`** with the name of the Python file that runs the crawler if it has a different name.
 3. Follow any on-screen instructions. The crawler will begin collecting the data you need.
 
 ## Step 6: View the Results
-1. Once the script finishes running, the results will be saved in the project folder, usually as a CSV or text file.
-2. Locate the file (e.g., **results.csv**) in the project folder to view the data collected by the crawler.
 
 ## Notes
 - Make sure your computer is connected to the internet during the entire process.
-- If you encounter any issues, contact me for further assistance.
+- If you happen to have any issues, please feel free to contact me for further assistance.
 
 ## Troubleshooting Tips
 - **Command not found**: Ensure that Python and Git were installed correctly, and Python was added to PATH.
